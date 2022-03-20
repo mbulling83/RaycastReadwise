@@ -12,6 +12,18 @@
       "title": "Recent Highlights",
       "description": "Template for showing a static list and a detail view",
       "mode": "view"
+    },
+    {
+      "name": "hackernews",
+      "title": "Hacker News",
+      "description": "Hacker news",
+      "mode": "view"
+    },
+    {
+      "name": "readwise2",
+      "title": "Readwise Highlights",
+      "description": "Search your readwise highlights",
+      "mode": "view"
     }
   ],
   "preferences": [
@@ -26,7 +38,10 @@
   ],
   "dependencies": {
     "@raycast/api": "^1.30.3",
-    "node-fetch": "^3.2.3"
+    "axios": "^0.26.1",
+    "node-fetch": "^3.2.3",
+    "rss-parser": "^3.12.0",
+    "axios": "^0.26.1"
   },
   "devDependencies": {
     "@types/node": "~16.10.0",

@@ -13,10 +13,7 @@ import { useEffect } from "react";
 import { Highlight, Book, Tag } from "./highlight" 
 import fetch, { Headers } from "node-fetch";
 
-
-
-
-export default function DailyList() {
+export default function RecentHighlightList() {
   const [state, setState] = useState<Trend[]>();
   const { accessToken } = getPreferenceValues();
   

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "readwisehighlights",
+  "title": "ReadwiseHighlights",
+  "description": "",
+  "icon": "command-icon.png",
+  "author": "markb",
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "index",
+      "title": "Recent Highlights",
+      "description": "Template for showing a static list and a detail view",
+      "mode": "view"
+    }
+  ],
+  "preferences":[
+    {
+        "name": "token",
+        "type": "password",
+        "required": true,
+        "title": "API Token",
+        "description": "Your Readwise API access token",
+        "placeholder": "Enter your API access token"
+      
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.30.3"
+  },
+  "devDependencies": {
+    "@types/node": "~16.10.0",
+    "@types/react": "^17.0.28",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.5.1",
+    "react-devtools": "^4.19.2",
+    "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint"
+  }
+}

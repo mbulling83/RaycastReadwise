@@ -1,4 +1,6 @@
-import { ActionPanel, Detail, List, Action } from "@raycast/api";
+import { getPreferenceValues, ActionPanel, Detail, List, Action } from "@raycast/api";
+
+const preferences = getPreferenceValues();
 
 export default function Command() {
   return (
@@ -9,6 +11,15 @@ export default function Command() {
         actions={
           <ActionPanel>
             <Action.Push title="Show Details" target={<Detail markdown="# Hey! 👋" />} />
+          </ActionPanel>
+        }
+      />
+        <List.Item
+        icon="list-icon.png"
+        title="Greeting 2"
+        actions={
+          <ActionPanel>
+            <Action.Push title="Show Details" target={<Detail markdown="## Hey! 👋" />} />
           </ActionPanel>
         }
       />

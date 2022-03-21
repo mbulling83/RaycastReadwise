@@ -8,6 +8,7 @@ import useSWR from "swr";
 import { useEffect } from "react";
 import { HTTPError } from "got";
 import { internalChildInvariant } from "@raycast/api/types/api/internal";
+import { fetchHighlights, useHighlights } from "./readwise";
 
 const preferences = getPreferenceValues();
 const accessToken = preferences.token;
@@ -53,7 +54,7 @@ export async function fetchBooks({ name, state, count }: FetchBooksRequest = {})
       tags: item.tags
     }));
 
-    return books;
+    return books.sort((a, b) => b.num_highlights - a.num_highlights)
   }
 
   export function useBooks() {
@@ -90,9 +91,22 @@ export default function Search() {
             accessoryTitle={`💬  ${book.num_highlights}`}
             actions={
               <ActionPanel>
-                <Action.Push  title="Show Details" 
+                {/* <Action.Push  title="Show Highlights from Book" 
+                              target={
+
+                                <List throttle isLoading={loading} searchBarPlaceholder="Filter highlights...">
+                                  const { bookmarks, loading} = useHighlights();
+
+                                  {bookmarks.map((bookmark) => (
+                                  <List.Item
+                                    key={bookmark.id}
+                                    title={bookmark.text}
+                                  />))}
+                               </List>} /> */}
+
+                <Action.Push  title="Show Book Details" 
                               target={<Detail markdown = {
-                              `${book.title} \\
+                              `###${book.title} \\
                               **Author:**${book.author} \\
                               **Link:** [Click here for highlights](${book.highlights_url}) \\
                               **Updated at:** ${book.updated}`} />} />

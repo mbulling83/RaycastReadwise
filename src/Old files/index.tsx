@@ -10,7 +10,7 @@ import {
 
 import { useEffect } from "react";
 
-import { Highlight, Book, Tag } from "./highlight" 
+import { Highlight, Book, Tag } from "../highlight" 
 import fetch, { Headers } from "node-fetch";
 
 export default function RecentHighlightList() {

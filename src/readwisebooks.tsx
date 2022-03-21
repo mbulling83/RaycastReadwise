@@ -88,11 +88,20 @@ export default function Search() {
       { id: 5, name: "podcasts"}
     ];
 
+    const onContentTypeChange = (newValue) => {
+      console.log(newValue);
+    };
+
     return (
         <List 
           throttle 
           isLoading={loading} 
-          searchBarPlaceholder="Filter books..."
+          searchBarPlaceholder="Search books..."
+          // searchBarAccessory={
+          //   <ContentDropdown
+          //     contentTypes={contentTypes}
+          //     onContentTypeChange={onContentTypeChange}
+          //   />}
         >
             {books.map((book) => (
             <List.Item
@@ -101,6 +110,7 @@ export default function Search() {
             highlights={book.num_highlights}
             subtitle={book.author}
             accessoryTitle={`${book.num_highlights}     Updated: ${book.updated.substring(0, 10)}`}
+
             actions={
               <ActionPanel>
                 <Action.Push  title={"Show highlights from book"} 
@@ -114,7 +124,7 @@ export default function Search() {
                               `**${book.title}** \\
                               ${book.author} \\
                               **Link:** [Click here for highlights](${book.highlights_url}) \\
-                              **Updated at:** ${book.updated}`} />} /> 
+                              **Updated at:** ${book.updated.substring(0, 10)}`} />} /> 
 
                 <Action.CopyToClipboard 
                               title="Copy Title, Author and Link"
@@ -131,22 +141,28 @@ export function ShowHighlights(book) {
   const { bookmarks, loading} = useBookHighlights(book.item.id);
 
   return (
-        <List throttle isLoading={loading} searchBarPlaceholder="Filter highlights...">
+        <List throttle isLoading={loading} searchBarPlaceholder="Search highlights...">
             {bookmarks.map((bookmark) => (
             <List.Item
             key={bookmark.id}
             title={bookmark.text}
-            accessoryTitle={`${bookmark.updated.substring(0, 10)}`}
+            accessoryTitle={`${bookmark.text.split(' ').length} words ${bookmark.updated.substring(0, 10)}`}
             actions={
               <ActionPanel>
                 <Action.Push  title="Show Details" 
-                              target={<Detail markdown = {
+                              target={<Detail 
+                              actions={<ActionPanel> 
+                                <Action.CopyToClipboard content={
+                                `${bookmark.text} - **${book.item.title}, ${book.item.author}** https://readwise.io/bookreview/${book.id} `}/>
+                                </ActionPanel>} 
+                                
+                              markdown = {
                               `"${bookmark.text}" \\
                               **Tags:** ${bookmark.tags} \\
                               **Book:** ${book.item.title} \\
                               **Author** ${book.item.author} \ 
                               **Link:** [${bookmark.url}](${bookmark.url}) \\
-                              **Updated at:** ${bookmark.updated}`} />} />
+                              **Updated at:** ${bookmark.updated.substring(0,10)}`} />} />
 
                 <Action.CopyToClipboard content={
                               `${bookmark.text} - **${book.item.title}, ${book.item.author}** `}/>
@@ -156,7 +172,6 @@ export function ShowHighlights(book) {
         ))    }
         </List>
     )}
-
 
 // This and the following function can probably be abstracted into a single function with fetchHiglights pretty soon
 export async function fetchBookHighlights(book_id, { name, state, count }: FetchBookmarksRequest = {}): Promise<Array<Highlight>> {
@@ -210,4 +225,25 @@ export function useBookHighlights(book_id) {
   };
 }
 
-
+function ContentDropdown(props: ContentDropdownProps) {
+  const { isLoading = false, contentTypes, onContentTypeChange } = props;
+  return (
+    <List.Dropdown
+      tooltip="Select Content Type"
+      storeValue={true}
+      onChange={(newValue) => {
+        onContentTypeChange(newValue);
+      }}
+    >
+      <List.Dropdown.Section title="Content Types">
+        {contentTypes.map((contentType) => (
+          <List.Dropdown.Item
+            key={contentType.id}
+            title={contentType.name}
+            value={contentType.id}
+          />
+        ))}
+      </List.Dropdown.Section>
+    </List.Dropdown>
+  );
+}

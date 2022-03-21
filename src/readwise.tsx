@@ -30,7 +30,7 @@ interface FetchBookmarksResponse {
 export async function fetchHighlights({ name, state, count }: FetchBookmarksRequest = {}): Promise<Array<Highlight>> {
 
     // TODO: Need to figure out how to parse the saved token rather than the actual one
-    const response = await api.get("v2/highlights/", 
+    const response = await api.get("v2/highlights?page_size=1000", 
         {headers: {Authorization: `Token ${accessToken}`}},  
         {responseType: 'json'});
 
@@ -74,26 +74,29 @@ export async function fetchHighlights({ name, state, count }: FetchBookmarksRequ
   }
 
 export default function Search() {
-    // const bookmarks = fetchBookmarks();
     const { bookmarks, loading} = useHighlights();
 
     return (
-        <List throttle isLoading={loading} searchBarPlaceholder="Filter highlights...">
+        <List throttle isLoading={loading} searchBarPlaceholder="Search highlights...">
             {bookmarks.map((bookmark) => (
             <List.Item
             key={bookmark.id}
             title={bookmark.text}
+            accessoryTitle={`${bookmark.text.split(' ').length} words ${bookmark.updated.substring(0, 10)}`}
             actions={
               <ActionPanel>
                 <Action.Push  title="Show Details" 
-                              target={<Detail markdown = {
-                              `${bookmark.text} \\
+                              target={<Detail 
+                              actions={<ActionPanel> 
+                                  <Action.CopyToClipboard content={
+                                  `${bookmark.text} - ${bookmark.url}`}/>
+                                  </ActionPanel>}   
+                              
+                              markdown = {
+                              `"${bookmark.text}" \\
                               **Tags:**${bookmark.tags} \\
                               **Link:** [${bookmark.url}](${bookmark.url}) \\
-                              **Updated at:** ${bookmark.updated}`} />} />
-
-                
-
+                              **Updated at:** ${bookmark.updated.substring(0,10)}`} />} />
 
 
                 <Action.CopyToClipboard content={

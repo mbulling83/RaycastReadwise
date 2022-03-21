@@ -33,7 +33,7 @@ export async function fetchBookmarks({ name, state, count }: FetchBookmarksReque
 
     // TODO: Need to figure out how to parse the saved token rather than the actual one
     const response = await api.get("v2/highlights/", {
-        headers: {Authorization: "Token 4rCYVm2ZcDANTQT7C3X00vER6ENN6biAdpKGYO7P9KSBuQRw2f"}
+        headers: {Authorization: {`Token ${accessToken}`}
     },  {responseType: 'json'});
 
     const result = JSON.parse(response.body);

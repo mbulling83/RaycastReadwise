@@ -13,7 +13,7 @@ export default function Command() {
   const [state, setState] = useState<State>({});
 
   useEffect(() => {
-    async function fetchStories() {
+    async function fetchHighlights() {
       try {
         const feed = await parser.parseURL(
           "https://hnrss.org/frontpage?description=0&count=25"
@@ -27,7 +27,7 @@ export default function Command() {
       }
     }
 
-    fetchStories();
+    fetchHighlights();
   }, []);
 
   return (

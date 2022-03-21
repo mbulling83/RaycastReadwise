@@ -8,19 +8,7 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "index",
-      "title": "Recent Highlights",
-      "description": "Template for showing a static list and a detail view",
-      "mode": "view"
-    },
-    {
-      "name": "hackernews",
-      "title": "Hacker News",
-      "description": "Hacker news",
-      "mode": "view"
-    },
-    {
-      "name": "readwise3",
+      "name": "readwise",
       "title": "Readwise Highlights",
       "description": "Search your readwise highlights",
       "mode": "view"
@@ -41,8 +29,7 @@
     "axios": "^0.26.1",
     "got": "^12.0.2",
     "node-fetch": "^3.2.3",
-    "rss-parser": "^3.12.0",
-    "swr": "^1.2.2"
+    "rss-parser": "^3.12.0"
   },
   "devDependencies": {
     "@types/node": "~16.10.0",

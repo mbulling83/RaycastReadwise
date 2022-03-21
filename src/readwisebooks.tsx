@@ -100,7 +100,7 @@ export default function Search() {
             title={book.title}
             highlights={book.num_highlights}
             subtitle={book.author}
-            accessoryTitle={`${book.num_highlights}`}
+            accessoryTitle={`${book.num_highlights}     Updated: ${book.updated.substring(0, 10)}`}
             actions={
               <ActionPanel>
                 <Action.Push  title={"Show highlights from book"} 
@@ -136,15 +136,15 @@ export function ShowHighlights(book) {
             <List.Item
             key={bookmark.id}
             title={bookmark.text}
-            accessoryTitle={bookmark.highlighted_at}
+            accessoryTitle={`${bookmark.updated.substring(0, 10)}`}
             actions={
               <ActionPanel>
                 <Action.Push  title="Show Details" 
                               target={<Detail markdown = {
-                              `${bookmark.text} \\
+                              `"${bookmark.text}" \\
                               **Tags:** ${bookmark.tags} \\
                               **Book:** ${book.item.title} \\
-                              **Author** ${book.item.author} \\ 
+                              **Author** ${book.item.author} \ 
                               **Link:** [${bookmark.url}](${bookmark.url}) \\
                               **Updated at:** ${bookmark.updated}`} />} />
 

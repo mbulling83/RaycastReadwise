@@ -107,14 +107,14 @@ export default function Search() {
                               target={ 
                                 <ShowHighlights
                                 key={book.id} 
-                                item={book.id} /> } />
+                                item={book} /> } />
 
                 <Action.Push  title="Show Book Details" 
                               target={<Detail markdown = {
-                              `###${book.title} \\
-                              **Author:**${book.author} \\
+                              `**${book.title}** \\
+                              ${book.author} \\
                               **Link:** [Click here for highlights](${book.highlights_url}) \\
-                              **Updated at:** ${book.updated}`} />} />
+                              **Updated at:** ${book.updated}`} />} /> 
 
                 <Action.CopyToClipboard 
                               title="Copy Title, Author and Link"
@@ -126,9 +126,9 @@ export default function Search() {
         </List>
     )}
 
-export function ShowHighlights(book_id) {
+export function ShowHighlights(book) {
 
-  const { bookmarks, loading} = useBookHighlights(book_id.item);
+  const { bookmarks, loading} = useBookHighlights(book.item.id);
 
   return (
         <List throttle isLoading={loading} searchBarPlaceholder="Filter highlights...">
@@ -136,19 +136,20 @@ export function ShowHighlights(book_id) {
             <List.Item
             key={bookmark.id}
             title={bookmark.text}
+            accessoryTitle={bookmark.highlighted_at}
             actions={
               <ActionPanel>
                 <Action.Push  title="Show Details" 
                               target={<Detail markdown = {
                               `${bookmark.text} \\
-                              **Tags:**${bookmark.tags} \\
+                              **Tags:** ${bookmark.tags} \\
+                              **Book:** ${book.item.title} \\
+                              **Author** ${book.item.author} \\ 
                               **Link:** [${bookmark.url}](${bookmark.url}) \\
                               **Updated at:** ${bookmark.updated}`} />} />
 
-
-
                 <Action.CopyToClipboard content={
-                              `${bookmark.text}`}/>
+                              `${bookmark.text} - **${book.item.title}, ${book.item.author}** `}/>
                                         
               </ActionPanel>}
             />
@@ -192,8 +193,6 @@ export async function fetchBookHighlights(book_id, { name, state, count }: Fetch
 
 export function useBookHighlights(book_id) {
   const { data, error, isValidating} = useSWR<Array<Highlight>, HTTPError>(book_id, fetchBookHighlights);
-
-  console.log(data)
 
   useEffect(() => {
     if (error) {

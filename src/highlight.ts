@@ -1,6 +1,6 @@
 export interface Highlight {
     "id": BigInt,
-    "text": string,
+    "text": string
     "note": string,
     "location": string,
     "location_type": string,
@@ -33,7 +33,12 @@ export interface Book {
     "tags": Tag[]
 }
 
-export interface RawBookmark {
+export interface RawHighlight {
+    id: string;
+    text: string;
+  }  
+
+  export interface RawBook {
     id: string;
     text: string;
   }  

@@ -88,7 +88,7 @@ export default function Search() {
                 <Action.Push  title="Show Details" 
                               target={<Detail markdown = {
                               `${bookmark.text} \\
-                              **Tags:**${bookmark.tags}
+                              **Tags:**${bookmark.tags} \\
                               **Link:** [${bookmark.url}](${bookmark.url}) \\
                               **Updated at:** ${bookmark.updated}`} />} />
 

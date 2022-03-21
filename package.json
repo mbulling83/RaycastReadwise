@@ -12,6 +12,12 @@
       "title": "Readwise Highlights",
       "description": "Search your readwise highlights",
       "mode": "view"
+    },
+    {
+      "name": "readwisebooks",
+      "title": "Readwise Books",
+      "description": "Search your readwise books",
+      "mode": "view"
     }
   ],
   "preferences": [

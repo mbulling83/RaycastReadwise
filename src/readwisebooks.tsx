@@ -79,9 +79,6 @@ export async function fetchBooks({ name, state, count }: FetchBooksRequest = {})
 export default function Search() {
     // const bookmarks = fetchBookmarks();
     const { books, loading} = useBooks();
-    const onContentTypeChange = (newValue) => {
-      console.log(newValue);
-    };
 
     const contentTypes = [
       { id: 1, name: "books" },
@@ -108,9 +105,9 @@ export default function Search() {
               <ActionPanel>
                 <Action.Push  title={"Show highlights from book"} 
                               target={ 
-                                <ShowHighlights 
+                                <ShowHighlights
                                 key={book.id} 
-                                item={book} /> } />
+                                item={book.id} /> } />
 
                 <Action.Push  title="Show Book Details" 
                               target={<Detail markdown = {
@@ -129,8 +126,9 @@ export default function Search() {
         </List>
     )}
 
-export const ShowHighlights = () => {
-  const { bookmarks, loading} = useBookHighlights();
+export function ShowHighlights(book_id) {
+
+  const { bookmarks, loading} = useBookHighlights(book_id.item);
 
   return (
         <List throttle isLoading={loading} searchBarPlaceholder="Filter highlights...">
@@ -158,39 +156,20 @@ export const ShowHighlights = () => {
         </List>
     )}
 
-// Use this at some point to filter the results down
-function contentDropdown(props: contentDropdownProps) {
-  const { isLoading = false, contentTypes, onContentTypeChange } = props;
-  return (
-    <List.Dropdown
-      tooltip="Select Content Type"
-      storeValue={true}
-      onChange={(newValue) => {
-        onContentTypeChange(newValue);
-      }}
-    >
-      <List.Dropdown.Section title="Content Types">
-        {contentTypes.map((contentType) => (
-          <List.Dropdown.Item
-            key={contentType.id}
-            title={contentType.name}
-            value={contentType.id}
-          />
-        ))}
-      </List.Dropdown.Section>
-    </List.Dropdown>
-  );
-}
 
-// This can probably be abstracted into a single function with fetchHiglights pretty soon
-export async function fetchBookHighlights({ name, state, count }: FetchBookmarksRequest = {}): Promise<Array<Highlight>> {
+// This and the following function can probably be abstracted into a single function with fetchHiglights pretty soon
+export async function fetchBookHighlights(book_id, { name, state, count }: FetchBookmarksRequest = {}): Promise<Array<Highlight>> {
+  
+  const url = `v2/highlights?book_id=${book_id}`
+
 
   // TODO: Need to figure out how to parse the saved token rather than the actual one
-  const response = await api.get("v2/highlights/?book_id=6169434", 
+  const response = await api.get(url, 
       {headers: {Authorization: `Token ${accessToken}`}},  
       {responseType: 'json'});
 
   const result = JSON.parse(response.body);
+
   const results = result.results as FetchBookmarksResponse;
 
   const bookmarks: Array<Highlight> = Object.values(results).map((item) => ({
@@ -206,12 +185,15 @@ export async function fetchBookHighlights({ name, state, count }: FetchBookmarks
     book_id: item.book_id,
     tags: item.tags
   }));
+  
 
   return bookmarks;
 }
 
-export function useBookHighlights() {
-  const { data, error, isValidating} = useSWR<Array<Highlight>, HTTPError>("v2/highlights/", fetchBookHighlights);
+export function useBookHighlights(book_id) {
+  const { data, error, isValidating} = useSWR<Array<Highlight>, HTTPError>(book_id, fetchBookHighlights);
+
+  console.log(data)
 
   useEffect(() => {
     if (error) {
@@ -228,3 +210,5 @@ export function useBookHighlights() {
     loading: (!data && !error) || isValidating
   };
 }
+
+

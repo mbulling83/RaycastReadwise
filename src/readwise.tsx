@@ -27,7 +27,7 @@ interface FetchBookmarksResponse {
     list: Record<string, RawHighlight>;
   }
 
-export async function fetchBookmarks({ name, state, count }: FetchBookmarksRequest = {}): Promise<Array<Highlight>> {
+export async function fetchHighlights({ name, state, count }: FetchBookmarksRequest = {}): Promise<Array<Highlight>> {
 
     // TODO: Need to figure out how to parse the saved token rather than the actual one
     const response = await api.get("v2/highlights/", 
@@ -54,8 +54,8 @@ export async function fetchBookmarks({ name, state, count }: FetchBookmarksReque
     return bookmarks;
   }
 
-  export function useBookmarks() {
-    const { data, error, isValidating} = useSWR<Array<Highlight>, HTTPError>("v2/highlights", fetchBookmarks);
+  export function useHighlights() {
+    const { data, error, isValidating} = useSWR<Array<Highlight>, HTTPError>("v2/highlights", fetchHighlights);
 
     useEffect(() => {
       if (error) {
@@ -75,7 +75,7 @@ export async function fetchBookmarks({ name, state, count }: FetchBookmarksReque
 
 export default function Search() {
     // const bookmarks = fetchBookmarks();
-    const { bookmarks, loading} = useBookmarks();
+    const { bookmarks, loading} = useHighlights();
 
     return (
         <List throttle isLoading={loading} searchBarPlaceholder="Filter highlights...">
@@ -91,6 +91,14 @@ export default function Search() {
                               **Tags:**${bookmark.tags}
                               **Link:** [${bookmark.url}](${bookmark.url}) \\
                               **Updated at:** ${bookmark.updated}`} />} />
+
+                
+
+
+
+                <Action.CopyToClipboard content={
+                              `${bookmark.text}`}/>
+                                        
               </ActionPanel>}
             />
         ))    }

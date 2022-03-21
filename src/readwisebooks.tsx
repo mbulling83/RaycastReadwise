@@ -30,7 +30,7 @@ interface FetchBooksResponse {
 export async function fetchBooks({ name, state, count }: FetchBooksRequest = {}): Promise<Array<Book>> {
 
     // TODO: Need to figure out how to parse the saved token rather than the actual one
-    const response = await api.get("v2/books/", 
+    const response = await api.get("v2/books?category=books&page_size=500", 
         {headers: {Authorization: `Token ${accessToken}`}},
         {responseType: 'json'}
         );
@@ -79,30 +79,38 @@ export async function fetchBooks({ name, state, count }: FetchBooksRequest = {})
 export default function Search() {
     // const bookmarks = fetchBookmarks();
     const { books, loading} = useBooks();
+    const onContentTypeChange = (newValue) => {
+      console.log(newValue);
+    };
+
+    const contentTypes = [
+      { id: 1, name: "books" },
+      { id: 2, name: "articles" },
+      { id: 3, name: "tweets"},
+      { id: 4, name: "supplementals"},
+      { id: 5, name: "podcasts"}
+    ];
 
     return (
-        <List throttle isLoading={loading} searchBarPlaceholder="Filter books...">
+        <List 
+          throttle 
+          isLoading={loading} 
+          searchBarPlaceholder="Filter books..."
+        >
             {books.map((book) => (
             <List.Item
             key={book.id}
             title={book.title}
             highlights={book.num_highlights}
             subtitle={book.author}
-            accessoryTitle={`💬  ${book.num_highlights}`}
+            accessoryTitle={`${book.num_highlights}`}
             actions={
               <ActionPanel>
-                {/* <Action.Push  title="Show Highlights from Book" 
-                              target={
-
-                                <List throttle isLoading={loading} searchBarPlaceholder="Filter highlights...">
-                                  const { bookmarks, loading} = useHighlights();
-
-                                  {bookmarks.map((bookmark) => (
-                                  <List.Item
-                                    key={bookmark.id}
-                                    title={bookmark.text}
-                                  />))}
-                               </List>} /> */}
+                <Action.Push  title={"Show highlights from book"} 
+                              target={ 
+                                <ShowHighlights 
+                                key={book.id} 
+                                item={book} /> } />
 
                 <Action.Push  title="Show Book Details" 
                               target={<Detail markdown = {
@@ -120,3 +128,103 @@ export default function Search() {
         ))    }
         </List>
     )}
+
+export const ShowHighlights = () => {
+  const { bookmarks, loading} = useBookHighlights();
+
+  return (
+        <List throttle isLoading={loading} searchBarPlaceholder="Filter highlights...">
+            {bookmarks.map((bookmark) => (
+            <List.Item
+            key={bookmark.id}
+            title={bookmark.text}
+            actions={
+              <ActionPanel>
+                <Action.Push  title="Show Details" 
+                              target={<Detail markdown = {
+                              `${bookmark.text} \\
+                              **Tags:**${bookmark.tags} \\
+                              **Link:** [${bookmark.url}](${bookmark.url}) \\
+                              **Updated at:** ${bookmark.updated}`} />} />
+
+
+
+                <Action.CopyToClipboard content={
+                              `${bookmark.text}`}/>
+                                        
+              </ActionPanel>}
+            />
+        ))    }
+        </List>
+    )}
+
+// Use this at some point to filter the results down
+function contentDropdown(props: contentDropdownProps) {
+  const { isLoading = false, contentTypes, onContentTypeChange } = props;
+  return (
+    <List.Dropdown
+      tooltip="Select Content Type"
+      storeValue={true}
+      onChange={(newValue) => {
+        onContentTypeChange(newValue);
+      }}
+    >
+      <List.Dropdown.Section title="Content Types">
+        {contentTypes.map((contentType) => (
+          <List.Dropdown.Item
+            key={contentType.id}
+            title={contentType.name}
+            value={contentType.id}
+          />
+        ))}
+      </List.Dropdown.Section>
+    </List.Dropdown>
+  );
+}
+
+// This can probably be abstracted into a single function with fetchHiglights pretty soon
+export async function fetchBookHighlights({ name, state, count }: FetchBookmarksRequest = {}): Promise<Array<Highlight>> {
+
+  // TODO: Need to figure out how to parse the saved token rather than the actual one
+  const response = await api.get("v2/highlights/?book_id=6169434", 
+      {headers: {Authorization: `Token ${accessToken}`}},  
+      {responseType: 'json'});
+
+  const result = JSON.parse(response.body);
+  const results = result.results as FetchBookmarksResponse;
+
+  const bookmarks: Array<Highlight> = Object.values(results).map((item) => ({
+    id: item.id,
+    text: item.text,
+    note: item.note,
+    location: item.location,
+    location_type: item.location_type,
+    highlighted_at: item.hightlighted_at,
+    url: item.url,
+    color: item.color,
+    updated: item.updated,
+    book_id: item.book_id,
+    tags: item.tags
+  }));
+
+  return bookmarks;
+}
+
+export function useBookHighlights() {
+  const { data, error, isValidating} = useSWR<Array<Highlight>, HTTPError>("v2/highlights/", fetchBookHighlights);
+
+  useEffect(() => {
+    if (error) {
+      if (error.response.statusCode === 401 || error.response.statusCode === 403) {
+        showToast(ToastStyle.Failure, "Invalid Credentials", "Check you Readwise extension preferences");
+      } else {
+        throw error;
+      }
+    }
+  }, [error]);
+
+  return {
+    bookmarks: data || [],
+    loading: (!data && !error) || isValidating
+  };
+}

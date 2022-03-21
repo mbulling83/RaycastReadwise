@@ -1,6 +1,6 @@
 // Get the list of books a user has
 
-import { getPreferenceValues, showToast, ToastStyle, Detail, List, Action, ActionPanel} from "@raycast/api";
+import { getPreferenceValues, Icon, showToast, ToastStyle, Detail, List, Action, ActionPanel} from "@raycast/api";
 import { access } from "fs";
 import got from "got";
 import { Highlight,  Tag, Book, RawHighlight, RawBook} from "./highlight";
@@ -136,6 +136,14 @@ export default function Search() {
         </List>
     )}
 
+function hasNote(note){
+  if (note.split(' ').length>1){
+    return Icon.Text
+  }
+  else {
+    return ""}
+}
+
 export function ShowHighlights(book) {
 
   const { bookmarks, loading} = useBookHighlights(book.item.id);
@@ -146,6 +154,8 @@ export function ShowHighlights(book) {
             <List.Item
             key={bookmark.id}
             title={bookmark.text}
+            // accessoryIcon={Icon.Text}
+            accessoryIcon= {hasNote(bookmark.note)}
             accessoryTitle={`${bookmark.text.split(' ').length} words ${bookmark.updated.substring(0, 10)}`}
             actions={
               <ActionPanel>
@@ -161,6 +171,7 @@ export function ShowHighlights(book) {
                               **Tags:** ${bookmark.tags} \\
                               **Book:** ${book.item.title} \\
                               **Author** ${book.item.author} \ 
+                              **Note** ${book.item.note} \\
                               **Link:** [${bookmark.url}](${bookmark.url}) \\
                               **Updated at:** ${bookmark.updated.substring(0,10)}`} />} />
 

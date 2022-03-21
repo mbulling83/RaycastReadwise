@@ -30,5 +30,10 @@ export interface Book {
     "highlights_url": string,
     "source_url": string,
     "asin": string,
-    "tags": tag[]
+    "tags": Tag[]
 }
+
+export interface RawBookmark {
+    id: string;
+    text: string;
+  }  

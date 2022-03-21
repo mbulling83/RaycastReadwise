@@ -1,17 +1,17 @@
-import { List } from "@raycast/api";
+import { List, getPreferenceValues} from "@raycast/api";
 import { useEffect, useState } from "react";
 import Parser, { Item } from "rss-parser";
-import { axios } from "axios" 
-
-const parser = new Parser();
+import axios from "axios";
+import {Highlight, Tag} from "highlight"
 
 interface State {
-  items?: Parser.Item[];
+  items?: Highlight[];
   error?: Error;
 }
 
 export default function Command() {
   const [state, setState] = useState<State>({});
+
 
   useEffect(() => {
     async function fetchHighlights() {
@@ -23,8 +23,9 @@ export default function Command() {
               {headers: {'Authorization': 'Token ${preferences.token}'
               }}
         );
-        const highlightsData: highlightsdata = JSON.parse(res.data.replace(")]}',", ""));
-        setState({ items: res.results.items });
+        const res2 = JSON.parse(res.data.replace(")]}',", ""));
+        setState({ items: res2.results.items });
+        console.log("hello world")
 
       } catch (error) {
         setState({
@@ -34,13 +35,16 @@ export default function Command() {
       }
     }
 
+
     fetchHighlights();
+    
+    // console.log(res2)
   }, []);
 
   return (
     <List isLoading={!state.items && !state.error}>
       {state.items?.map((item, index) => (
-        <HighlightListItem key={item.text} item={item} index={index} />
+        <HighlightListItem key={item.id} item={item} index={index} />
       ))}
     </List>
   );
@@ -55,29 +59,3 @@ function HighlightListItem(props: { item: Item; index: number }) {
     );
   }
   
-const iconToEmojiMap = new Map<number, string>([
-[1, "1️⃣"],
-[2, "2️⃣"],
-[3, "3️⃣"],
-[4, "4️⃣"],
-[5, "5️⃣"],
-[6, "6️⃣"],
-[7, "7️⃣"],
-[8, "8️⃣"],
-[9, "9️⃣"],
-[10, "🔟"],
-]);
-
-function getIcon(index: number) {
-    return iconToEmojiMap.get(index) ?? "⏺";
-}
-
-function getPoints(item: Parser.Item) {
-const matches = item.contentSnippet?.match(/(?<=Points:\s*)(\d+)/g);
-return matches?.[0];
-}
-
-function getComments(item: Parser.Item) {
-const matches = item.contentSnippet?.match(/(?<=Comments:\s*)(\d+)/g);
-return matches?.[0];
-}

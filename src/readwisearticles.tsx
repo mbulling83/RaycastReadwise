@@ -30,7 +30,7 @@ interface FetchBooksResponse {
 export async function fetchBooks({ name, state, count }: FetchBooksRequest = {}): Promise<Array<Book>> {
 
     // TODO: Need to figure out how to parse the saved token rather than the actual one
-    const response = await api.get("v2/books?category=books&page_size=500", 
+    const response = await api.get("v2/books?category=articles&page_size=500", 
         {headers: {Authorization: `Token ${accessToken}`}},
         {responseType: 'json'}
         );

@@ -9,6 +9,7 @@ import useSWR from "swr";
 import { useEffect } from "react";
 import { HTTPError } from "got";
 import { internalChildInvariant } from "@raycast/api/types/api/internal";
+import { hasNote } from "./readwisebooks";
 
 const preferences = getPreferenceValues();
 const accessToken = preferences.token;
@@ -82,6 +83,7 @@ export default function Search() {
             <List.Item
             key={bookmark.id}
             title={bookmark.text}
+            accessoryIcon= {hasNote(bookmark.note)}
             accessoryTitle={`${bookmark.text.split(' ').length} words ${bookmark.updated.substring(0, 10)}`}
             actions={
               <ActionPanel>

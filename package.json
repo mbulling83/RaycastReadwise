@@ -18,6 +18,12 @@
       "title": "Readwise Books",
       "description": "Search your readwise books",
       "mode": "view"
+    },
+    {
+      "name": "readwisearticles",
+      "title": "Readwise Articles",
+      "description": "Search your readwise articles",
+      "mode": "view"
     }
   ],
   "preferences": [

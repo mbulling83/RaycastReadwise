@@ -2,9 +2,9 @@
 This extension enables you to access all your Readwise highlights from Raycast.
 
 ## Getting started
-We're still in dev mode right now, so you'll need to (Create an Extension in Raycast)[https://developers.raycast.com/basics/create-your-first-extension] and then clone this repo into that folder to make it work. 
+We're still in dev mode right now, so you'll need to [Create an Extension in Raycast](https://developers.raycast.com/basics/create-your-first-extension) and then clone this repo into that folder to make it work. 
 
-After you've cloned this repo successfully, you then need to build the extension. First, make sure that you have node installed - (directions are here)[https://docs.npmjs.com/downloading-and-installing-node-js-and-npm] 
+After you've cloned this repo successfully, you then need to build the extension. First, make sure that you have node installed - [directions are here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 Once you have node installed, run "npm install && npm run dev" in the folder where the extension is. Note that you need to keep the terminal running where you make this command otherwise the extension will disappear from your Raycast.
 

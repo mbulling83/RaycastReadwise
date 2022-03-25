@@ -24,12 +24,6 @@
       "title": "Readwise Articles",
       "description": "Search your readwise articles",
       "mode": "view"
-    },
-    {
-      "name": "readwise favorite",
-      "title": "Readwise Favorites",
-      "description": "Search your readwise favorites",
-      "mode": "view"
     }
   ],
   "preferences": [

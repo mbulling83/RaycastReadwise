@@ -24,12 +24,6 @@
       "title": "Readwise Articles",
       "description": "Search your readwise articles",
       "mode": "view"
-    },
-    {
-      "name": "readwise favorite",
-      "title": "Readwise Favorites",
-      "description": "Search your readwise favorites",
-      "mode": "view"
     }
   ],
   "preferences": [
@@ -47,7 +41,8 @@
     "axios": "^0.26.1",
     "got": "^12.0.2",
     "node-fetch": "^3.2.3",
-    "rss-parser": "^3.12.0"
+    "rss-parser": "^3.12.0",
+    "swr": "^1.2.2"
   },
   "devDependencies": {
     "@types/node": "~16.10.0",

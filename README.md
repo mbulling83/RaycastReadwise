@@ -14,4 +14,10 @@ After you've selected one of them, you should be asked for your Readwise Access 
 
 Use cmd+k to then see all the things that you do to explore your books, highlights and articles. 
 
+# On the roadmap
+
+ [ ] Refactor the code to reduce duplication
+ [ ] See the tags for a book or highlight
+ [ ] Add notes to highlights 
+ [ ] Add tags to highlights
 

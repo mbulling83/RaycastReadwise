@@ -16,8 +16,8 @@ Use cmd+k to then see all the things that you do to explore your books, highligh
 
 # On the roadmap
 
- [ ] Refactor the code to reduce duplication
- [ ] See the tags for a book or highlight
- [ ] Add notes to highlights 
- [ ] Add tags to highlights
+- [ ] Refactor the code to reduce duplication
+- [ ] See the tags for a book or highlight-_
+- [ ] Add notes to highlights 
+- [ ] Add tags to highlights
 
